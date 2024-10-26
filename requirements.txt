@@ -1,0 +1,6 @@
+fastapi==0.115.3
+uvicorn==0.32.0
+python-dotenv==1.0.1
+colorama==0.4.6
+aiohttp==3.10.10
+pyjwt==2.9.0
