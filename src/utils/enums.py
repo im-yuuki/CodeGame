@@ -9,5 +9,5 @@ class SubmissionStatus(StrEnum):
     MEMORY_LIMIT_EXCEEDED = auto(),
     INTERNAL_ERROR = auto(),
     COMPILATION_ERROR = auto(),
-    RUNTIME_ERROR = auto(),
+    RUNTIME_ERROR = auto()
     

@@ -1,9 +1,11 @@
-import fastapi
+from fastapi.staticfiles import StaticFiles
 import os
 
 import uvicorn
 from dotenv import load_dotenv
 
+from api.admin import AdminRouter
+from api.contestant import ContestantRouter
 from managers.base import BaseLoader
 from utils import setup_logging
 
@@ -24,11 +26,12 @@ __  __            __
 """)
     setup_logging.setup()
     load_dotenv()
-    app = fastapi.FastAPI()
-    base = BaseLoader(app)
-    
+    base = BaseLoader()
+    # base.server.mount("/", StaticFiles(directory="src/web", html=True))
+    base.server.mount("/api/admin", AdminRouter(base))
+    base.server.mount("/api/contestant", ContestantRouter(base))
     uvicorn.run(
-        app,
+        base.server,
         host="0.0.0.0",
         port=os.getenv("PORT", 8080),
         loop="asyncio",
