@@ -1,13 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>FIT-UET CodeGame</title>
-	<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-	<div id="root">
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FIT-UET CodeGame</title>
+        <link rel="stylesheet" type="text/css" href="background.css" />
+        <link rel="stylesheet" type="text/css" href="base.css" />
+        <link rel="stylesheet" type="text/css" href="loading.css" />
+        <link rel="stylesheet" type="text/css" href="libs/toastr.min.css" />
+    </head>
+    <body>
+        <div class="background">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+        <div class="container">
+            <section id="register">
+                <div class="box">
+                    <div class="logo">
+                        <img src="assets/uet-logo.png" style="margin-left: 0;"/>
+                        <img src="assets/fit-logo.png" style="margin-right: 0;"/>
+                    </div>
+                    <h1>Chào mừng!</h1>
+                    <form id="register-form">
+                        <label for="name">Nhập tên của bạn:</label>
+                        <input type="text" name="name" required />
+                        <label>Chọn một màu bạn yêu thích:</label>
+                        <div>
+                            <div class="theme-selector" style="background-color: #d53e4f; margin-left: 0;"></div>
+                            <div class="theme-selector" style="background-color: #fdae61;"></div>
+                            <div class="theme-selector" style="background-color: #fee08b;"></div>
+                            <div class="theme-selector" style="background-color: #66c2a5;"></div>
+                            <div class="theme-selector" style="background-color: #3288bd;"></div>
+                            <div class="theme-selector" style="background-color: #5e4fa2; margin-right: 0;"></div>
+                        </div>
+                        <button class="btn" type="submit" id="register-btn">Tham gia</button>
+                    </form>
+                    <div id="waiting" hidden>
+                        <div class="lds-ring" style="color: black;">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <span>Bạn đã đăng kí thành công</span>
+                        <br>
+                        <span>Vui lòng đợi Ban tổ chức bắt đầu trận đấu nhé...</span>
+                    </div>
+                </div>
+                <div id="hidden-menu" hidden>
+                    <a href="#">[Bảng điều khiển]</a>
+                    <a href="#">[Khán giả]</a>
+                </div>
+            </section>
+            <section id="contest">
+            </section>
+            <section id="result">
 
-	</div>
-</body>
+            </section>
+        </div>
+    </body>
+    <style>
+        #register .box {
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+        }
+        #register .logo img {
+            height: 100px;
+            margin: 5px;
+        }
+        #register .box h1 {
+            margin: 15px auto;
+            font-size: 28pt;
+            text-align: center;
+        }
+        #register-form .theme-selector {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px 10px;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+        #register-form .theme-selector:hover {
+            border-color: black;
+        }
+        #register-form input {
+            padding: auto 10px;
+        }
+        #register-form button {
+            margin-top: 20px;
+        }
+        #register-form label {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 12pt;
+            font-weight: bold;
+            font-style: italic;
+        }
+        #waiting {
+            font-size: 12pt;
+            font-weight: bold;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+    <script src="libs/toastr.min.js"></script>
+    <script src="contestant.js"></script>
 </html>

@@ -17,8 +17,18 @@ class BaseLoader:
         self.server.mount("/ws", self.__ws_manager__)
         self.problem_manager = ProblemManager()
         self.contest: Contest = Contest(self.problem_manager, self.broadcast)
+        self.server.add_api_route("/", self.root)
+        self.server.add_api_route("/index.html", self.root)
+        self.server.add_api_route("/favicon.ico", self.favicon)
+
+
+    async def root(self):
+        return fastapi.responses.RedirectResponse("/ui/index.html")
     
+    async def favicon(self):
+        return fastapi.responses.RedirectResponse("/ui/favicon.ico")
     
+        
     def broadcast(self, message: dict):
         asyncio.create_task(self.__ws_manager__.broadcast(message))
         

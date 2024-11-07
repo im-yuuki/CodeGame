@@ -40,7 +40,7 @@ class Contest:
     async def __timer__(self):
         if not self.started:
             return
-        time = self.end - datetime.now(UTC).timestamp()
+        time = self.end - int(datetime.now(UTC).timestamp())
         if time > 0:
             await asyncio.sleep(time)
         self.stop()
@@ -65,7 +65,7 @@ class Contest:
         if len(self.problem_manager.problems) < problems_qty:
             problems_qty = len(self.problem_manager.problems)
         self.problems = random.choices(list(self.problem_manager.problems.values()), k=problems_qty)
-        self.end = datetime.now(UTC).timestamp() + duration
+        self.end = int(datetime.now(UTC).timestamp()) + duration
         self._timer = asyncio.create_task(self.__timer__())
         self.broadcast({
             "event": "CONTEST_STARTED",

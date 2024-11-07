@@ -27,7 +27,7 @@ __  __            __
     setup_logging.setup()
     load_dotenv()
     base = BaseLoader()
-    # base.server.mount("/", StaticFiles(directory="src/web", html=True))
+    base.server.mount("/ui", StaticFiles(directory="src/web", html=True))
     base.server.mount("/api/admin", AdminRouter(base))
     base.server.mount("/api/contestant", ContestantRouter(base))
     uvicorn.run(

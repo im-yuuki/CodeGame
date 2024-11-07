@@ -51,6 +51,8 @@ class AdminRouter(fastapi.APIRouter):
         try:
             data = await request.json()
             duration = data.get("duration", 1500)
+            if not isinstance(duration, int) or duration < 0:
+                raise ValueError()
             if self.base.contest.start(duration):
                 return fastapi.Response(status_code=200, content="Success")
             return fastapi.Response(status_code=409, content="Contest has already started")

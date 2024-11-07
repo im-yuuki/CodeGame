@@ -41,8 +41,8 @@ class ContestantRouter(fastapi.APIRouter):
             return fastapi.Response(status_code=409, content="Contest has already started")
         try:
             data = await request.json()
-            name = data.get("name", None)
-            if name is None:
+            name: Optional[str] = data.get("name", None)
+            if not isinstance(name, str) or len(name) < 3:
                 raise ValueError()
         except:
             return fastapi.Response(status_code=400, content="Bad request")
