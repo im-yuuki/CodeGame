@@ -1,4 +1,5 @@
 from fastapi.staticfiles import StaticFiles
+from fastapi import Response
 import os
 
 import uvicorn
@@ -8,6 +9,8 @@ from api.admin import AdminRouter
 from api.contestant import ContestantRouter
 from managers.base import BaseLoader
 from utils import setup_logging
+from utils.ratelimit import TokenBucket, RateLimit
+__VERSION__ = '0.0.1'
 
 
 if __name__ == "__main__":
@@ -30,6 +33,8 @@ __  __            __
     base.server.mount("/ui", StaticFiles(directory="src/web", html=True))
     base.server.mount("/api/admin", AdminRouter(base))
     base.server.mount("/api/contestant", ContestantRouter(base))
+    base.server.add_route("/version", Response(content=__VERSION__))
+    base.server.add_middleware(RateLimit, bucket=TokenBucket(int(os.getenv("RATELIMIT", 1000)), int(os.getenv("RATELIMIT_RATE", 10))))
     uvicorn.run(
         base.server,
         host="0.0.0.0",
