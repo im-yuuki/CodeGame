@@ -21,6 +21,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
+	font-family: Arial, sans-serif;
 }
 .box {
 	min-width: 50px;

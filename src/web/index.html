@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="background.css" />
         <link rel="stylesheet" type="text/css" href="base.css" />
         <link rel="stylesheet" type="text/css" href="loading.css" />
-        <link rel="stylesheet" type="text/css" href="libs/toastr.min.css" />
+        <link rel="stylesheet" type="text/css" href="contestant.css" />
     </head>
     <body>
         <div class="background">
@@ -22,99 +22,110 @@
             <div class="bubble"></div>
             <div class="bubble"></div>
         </div>
-        <div class="container">
-            <section id="register">
-                <div class="box">
-                    <div class="logo">
-                        <img src="assets/uet-logo.png" style="margin-left: 0;"/>
-                        <img src="assets/fit-logo.png" style="margin-right: 0;"/>
+        <section id="register" hidden>
+            <div class="box">
+                <div class="logo">
+                    <img src="assets/uet-logo.png" style="margin-left: 0" />
+                    <img
+                        src="assets/fit-logo.png"
+                        style="margin-right: 0"
+                    />
+                </div>
+                <h1>Chào mừng!</h1>
+                <form id="register-form">
+                    <label for="name">Nhập tên của bạn:</label>
+                    <input type="text" name="name" minlength="3" required />
+                    <label>Chọn màu bạn yêu thích:</label>
+                    <div>
+                        <div class="theme-selector" style="background-color: #d53e4f; margin-left: 0;"></div>
+                        <div class="theme-selector" style="background-color: #fdae61"></div>
+                        <div class="theme-selector" style="background-color: #fee08b"></div>
+                        <div class="theme-selector" style="background-color: #66c2a5"></div>
+                        <div class="theme-selector" style="background-color: #3288bd"></div>
+                        <div class="theme-selector" style="background-color: #5e4fa2; margin-right: 0;"></div>
                     </div>
-                    <h1>Chào mừng!</h1>
-                    <form id="register-form">
-                        <label for="name">Nhập tên của bạn:</label>
-                        <input type="text" name="name" required />
-                        <label>Chọn một màu bạn yêu thích:</label>
-                        <div>
-                            <div class="theme-selector" style="background-color: #d53e4f; margin-left: 0;"></div>
-                            <div class="theme-selector" style="background-color: #fdae61;"></div>
-                            <div class="theme-selector" style="background-color: #fee08b;"></div>
-                            <div class="theme-selector" style="background-color: #66c2a5;"></div>
-                            <div class="theme-selector" style="background-color: #3288bd;"></div>
-                            <div class="theme-selector" style="background-color: #5e4fa2; margin-right: 0;"></div>
-                        </div>
-                        <button class="btn" type="submit" id="register-btn">Tham gia</button>
-                    </form>
-                    <div id="waiting" hidden>
-                        <div class="lds-ring" style="color: black;">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                        <span>Bạn đã đăng kí thành công</span>
-                        <br>
-                        <span>Vui lòng đợi Ban tổ chức bắt đầu trận đấu nhé...</span>
+                    <button class="btn" type="submit" id="register-btn">Tham gia</button>
+                </form>
+                <div id="waiting" hidden>
+                    <div class="lds-ring" style="color: black">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <span>Bạn đã đăng kí thành công</span>
+                    <br />
+                    <span>Vui lòng đợi Ban tổ chức bắt đầu trận đấu nhé...</span>
+                </div>
+            </div>
+            <div id="hidden-menu" hidden>
+                <a href="#">[Bảng điều khiển]</a>
+                <a href="#">[Khán giả]</a>
+            </div>
+        </section>
+        <section id="contest">
+            <div id="top-bar">
+                <div id="user-card" class="box">
+                    <div style="display: block; width: 20px; height: 20px; border-radius: 50%; background-color: var(--theme-color);"></div>
+                    <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 10px;">
+                        <h1 id="contestant-name">Name</h1>
+                        <span id="contestant-desc">Description</span>
+                    </div>
+                    <div style="margin-left: auto;">
                     </div>
                 </div>
-                <div id="hidden-menu" hidden>
-                    <a href="#">[Bảng điều khiển]</a>
-                    <a href="#">[Khán giả]</a>
+                <div id="timer" class="box">
+                    <span id="timer-txt">--:--</span>
                 </div>
-            </section>
-            <section id="contest">
-            </section>
-            <section id="result">
+            </div>
+            <div id="workspace">
+                <div id="nav-bar" class="box">
+                    <div id="problem-btn" class="selected">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.2 21C6.07989 21 5.51984 21 5.09202 20.782C4.71569 20.5903 4.40973 20.2843 4.21799 19.908C4 19.4802 4 18.9201 4 17.8V6.2C4 5.07989 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V7M8 7H14M8 15H9M8 11H12M11.1954 20.8945L12.5102 20.6347C13.2197 20.4945 13.5744 20.4244 13.9052 20.2952C14.1988 20.1806 14.4778 20.0317 14.7365 19.8516C15.0279 19.6486 15.2836 19.393 15.7949 18.8816L20.9434 13.7332C21.6306 13.0459 21.6306 11.9316 20.9434 11.2444C20.2561 10.5571 19.1418 10.5571 18.4546 11.2444L13.2182 16.4808C12.739 16.96 12.4994 17.1996 12.3059 17.4712C12.1341 17.7123 11.9896 17.9717 11.8751 18.2447C11.7461 18.5522 11.6686 18.882 11.5135 19.5417L11.1954 20.8945Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div id="submission-btn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 17H17.01M15.6 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H8.4M12 15V4M12 4L15 7M12 4L9 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div id="ranking-btn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 14.6C3 14.0399 3 13.7599 3.10899 13.546C3.20487 13.3578 3.35785 13.2049 3.54601 13.109C3.75992 13 4.03995 13 4.6 13H5.4C5.96005 13 6.24008 13 6.45399 13.109C6.64215 13.2049 6.79513 13.3578 6.89101 13.546C7 13.7599 7 14.0399 7 14.6V19.4C7 19.9601 7 20.2401 6.89101 20.454C6.79513 20.6422 6.64215 20.7951 6.45399 20.891C6.24008 21 5.96005 21 5.4 21H4.6C4.03995 21 3.75992 21 3.54601 20.891C3.35785 20.7951 3.20487 20.6422 3.10899 20.454C3 20.2401 3 19.9601 3 19.4V14.6Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 4.6C10 4.03995 10 3.75992 10.109 3.54601C10.2049 3.35785 10.3578 3.20487 10.546 3.10899C10.7599 3 11.0399 3 11.6 3H12.4C12.9601 3 13.2401 3 13.454 3.10899C13.6422 3.20487 13.7951 3.35785 13.891 3.54601C14 3.75992 14 4.03995 14 4.6V19.4C14 19.9601 14 20.2401 13.891 20.454C13.7951 20.6422 13.6422 20.7951 13.454 20.891C13.2401 21 12.9601 21 12.4 21H11.6C11.0399 21 10.7599 21 10.546 20.891C10.3578 20.7951 10.2049 20.6422 10.109 20.454C10 20.2401 10 19.9601 10 19.4V4.6Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 10.6C17 10.0399 17 9.75992 17.109 9.54601C17.2049 9.35785 17.3578 9.20487 17.546 9.10899C17.7599 9 18.0399 9 18.6 9H19.4C19.9601 9 20.2401 9 20.454 9.10899C20.6422 9.20487 20.7951 9.35785 20.891 9.54601C21 9.75992 21 10.0399 21 10.6V19.4C21 19.9601 21 20.2401 20.891 20.454C20.7951 20.6422 20.6422 20.7951 20.454 20.891C20.2401 21 19.9601 21 19.4 21H18.6C18.0399 21 17.7599 21 17.546 20.891C17.3578 20.7951 17.2049 20.6422 17.109 20.454C17 20.2401 17 19.9601 17 19.4V10.6Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div id="exit-btn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3V12M18.3611 5.64001C19.6195 6.8988 20.4764 8.50246 20.8234 10.2482C21.1704 11.994 20.992 13.8034 20.3107 15.4478C19.6295 17.0921 18.4759 18.4976 16.9959 19.4864C15.5159 20.4752 13.776 21.0029 11.9961 21.0029C10.2162 21.0029 8.47625 20.4752 6.99627 19.4864C5.51629 18.4976 4.36274 17.0921 3.68146 15.4478C3.00019 13.8034 2.82179 11.994 3.16882 10.2482C3.51584 8.50246 4.37272 6.8988 5.6311 5.64001" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="problem" class="box workspace-window">
+                    <div id="problem-selector">
 
-            </section>
-        </div>
+                    </div>
+                    <div id="problem-display">
+                        <h1 id="problem-name">ProblemName</h1>
+                        <span id="problem-desc">Giới hạn thời gian: 1s | Bộ nhớ tối đa: 1024MiB</span>
+                        <br>
+                        <iframe
+                            src="http://infolab.stanford.edu/pub/papers/google.pdf"
+                            scrolling="auto"
+                        ></iframe>
+                    </div>
+                    
+                </div>
+                <div id="submission" class="box workspace-window" hidden>
+
+                </div>
+                <div id="ranking" class="box workspace-window" hidden>
+                    
+                </div>
+            </div>
+        </section>
+        <section id="statistic" hidden></section>
     </body>
-    <style>
-        #register .box {
-            padding: 60px 80px;
-            display: flex;
-            flex-direction: column;
-        }
-        #register .logo img {
-            height: 100px;
-            margin: 5px;
-        }
-        #register .box h1 {
-            margin: 15px auto;
-            font-size: 28pt;
-            text-align: center;
-        }
-        #register-form .theme-selector {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 5px 10px;
-            cursor: pointer;
-            border: 3px solid white;
-        }
-        #register-form .theme-selector:hover {
-            border-color: black;
-        }
-        #register-form input {
-            padding: auto 10px;
-        }
-        #register-form button {
-            margin-top: 20px;
-        }
-        #register-form label {
-            margin-top: 20px;
-            margin-bottom: 5px;
-            display: block;
-            font-size: 12pt;
-            font-weight: bold;
-            font-style: italic;
-        }
-        #waiting {
-            font-size: 12pt;
-            font-weight: bold;
-            font-style: italic;
-            text-align: center;
-        }
-    </style>
-    <script src="libs/toastr.min.js"></script>
     <script src="contestant.js"></script>
 </html>

@@ -1,0 +1,138 @@
+#register .box {
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+}
+#register .logo img {
+    height: 100px;
+    margin: 5px;
+}
+#register .box h1 {
+    margin: 15px auto;
+    font-size: 28pt;
+    text-align: center;
+}
+#register-form .theme-selector {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 5px 10px;
+    cursor: pointer;
+    border: 3px solid white;
+}
+#register-form .theme-selector:hover {
+    border-color: black;
+}
+#register-form .theme-selector.selected {
+    border-color: black;
+}
+#register-form input {
+    padding: auto 10px;
+}
+#register-form button {
+    margin-top: 20px;
+}
+#register-form label {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 12pt;
+    font-weight: bold;
+    font-style: italic;
+}
+#waiting {
+    font-size: 12pt;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+}
+#hidden-menu {
+    justify-content: center;
+    margin: 20px;
+}
+#contest {
+    width: 100vw;
+    height: 100vh;
+    padding: 30px;
+}
+#top-bar {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+#top-bar .box {
+    height: 70px;
+    background-color: white;
+    border-radius: 10px;
+}
+#top-bar #user-card {
+    width: 100%;
+    margin-right: 15px;
+}
+#top-bar #timer {
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+#top-bar #timer #timer-txt {
+    font-size: 28pt;
+    font-weight: bold;
+}
+#user-card {
+    display: flex;
+    flex-direction: row;
+    padding: 0 20px;
+}
+#workspace {
+    width: 100%;
+    height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: row;
+}
+#nav-bar {
+    width: 60px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+#nav-bar div {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#nav-bar div:hover {
+    border: 2px solid var(--theme-color);
+}
+#nav-bar div.selected svg path {
+    stroke: white;
+}
+#nav-bar div.selected {
+    background-color: var(--theme-color);
+}
+#nav-bar #exit-btn {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+#nav-bar #exit-btn:hover {
+    border: 0;
+    background-color: red;
+}
+#nav-bar #exit-btn:hover svg path {
+    stroke: white;
+}
+.workspace-window {
+    width: 100%;
+    margin-left: 15px;
+    padding: 20px;
+}
+#problem-display iframe {
+    width: 100%
+    height: 100%
+}

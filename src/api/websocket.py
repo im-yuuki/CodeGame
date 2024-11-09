@@ -1,17 +1,15 @@
 import asyncio
 import logging
-import fastapi
 from fastapi import WebSocket, WebSocketDisconnect
 
 logger = logging.getLogger(__name__)
 
 
-class WebSocketManager(fastapi.APIRouter):
+class WebSocketManager():
     def __init__(self):
         super().__init__()
         self.clients: set[WebSocket] = set()
         self.lock = asyncio.Lock()
-        self.add_websocket_route("/", self.endpoint)
     
     
     async def endpoint(self, websocket: WebSocket):

@@ -31,6 +31,7 @@ class Contest:
         self.problem_manager = problem_manager
         self.broadcast = broadcast
         self.started = False
+        self.stoped = False
         self.end: int = 0
         self.problems: list[Problem] = []
         self.contestants: dict[UUID, Contestant] = {}
@@ -80,6 +81,9 @@ class Contest:
     def stop(self) -> bool:
         if not self.started:
             return False
+        if self.stoped:
+            return False
+        self.stoped = True
         for contestant in self.contestants.values():
             contestant.finished = True
         if self._timer:

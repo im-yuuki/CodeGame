@@ -50,7 +50,7 @@ class AdminRouter(fastapi.APIRouter):
             return _auth
         try:
             data = await request.json()
-            duration = data.get("duration", 1500)
+            duration = data.get("duration", 1500) + 3
             if not isinstance(duration, int) or duration < 0:
                 raise ValueError()
             if self.base.contest.start(duration):

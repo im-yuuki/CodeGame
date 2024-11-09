@@ -14,12 +14,12 @@ class BaseLoader:
     def __init__(self):
         self.server: FastAPI = fastapi.FastAPI()
         self.__ws_manager__ = WebSocketManager()
-        self.server.mount("/ws", self.__ws_manager__)
         self.problem_manager = ProblemManager()
         self.contest: Contest = Contest(self.problem_manager, self.broadcast)
         self.server.add_api_route("/", self.root)
         self.server.add_api_route("/index.html", self.root)
         self.server.add_api_route("/favicon.ico", self.favicon)
+        self.server.add_websocket_route("/ws", self.__ws_manager__.endpoint)
 
 
     async def root(self):
