@@ -1,16 +1,35 @@
-#register .box {
+#register .box,
+#statistic .box {
     padding: 60px 80px;
     display: flex;
     flex-direction: column;
 }
-#register .logo img {
+#register .logo img,
+#statistic .logo img {
     height: 100px;
     margin: 5px;
 }
-#register .box h1 {
-    margin: 15px auto;
+#register .box h1,
+#statistic .box h1 {
+    margin-top: 15px;
+    margin-bottom: 30px;
     font-size: 28pt;
     text-align: center;
+}
+#register .box span,
+#statistic .box span {
+    margin-bottom: 10px;
+    display: block;
+    font-size: 12pt;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+}
+#statistic .box #score {
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 36pt;
+    color: var(--theme-color);
 }
 #register-form .theme-selector {
     width: 30px;
@@ -32,24 +51,6 @@
 }
 #register-form button {
     margin-top: 20px;
-}
-#register-form label {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    display: block;
-    font-size: 12pt;
-    font-weight: bold;
-    font-style: italic;
-}
-#waiting {
-    font-size: 12pt;
-    font-weight: bold;
-    font-style: italic;
-    text-align: center;
-}
-#hidden-menu {
-    justify-content: center;
-    margin: 20px;
 }
 #contest {
     width: 100vw;
@@ -83,18 +84,20 @@
 #user-card {
     display: flex;
     flex-direction: row;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
 }
 #workspace {
     width: 100%;
     height: calc(100vh - 150px);
     display: flex;
+    flex-shrink: 0;
     flex-direction: row;
 }
 #nav-bar {
     width: 60px;
     padding: 5px;
     display: flex;
+    flex-shrink: 0;
     flex-direction: column;
 }
 #nav-bar div {
@@ -104,6 +107,7 @@
     background-color: white;
     border-radius: 5px;
     display: flex;
+    flex-shrink: 0;
     justify-content: center;
     align-items: center;
 }
@@ -130,9 +134,122 @@
 .workspace-window {
     width: 100%;
     margin-left: 15px;
-    padding: 20px;
 }
-#problem-display iframe {
-    width: 100%
-    height: 100%
+.workspace-window div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    flex-direction: column;
+}
+.workspace-window div h1 {
+    margin-bottom: 15px;
+}
+#problem-display {
+    margin-top: 15px;
+    width: 100%;
+    height: 100%;
+}
+#submit-form {
+    margin-bottom: 30px;
+}
+#submit-form div {
+    height: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#submit-form div select {
+    margin-right: 10px;
+}
+#submission-list div.submission {
+    height: 50px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-self: center;
+    justify-content: center;
+    padding: 0;
+}
+#submission-list div.submission div {
+    margin-right: 10px;
+}
+#submission-list div.submission .color-indicator {
+    width: 20px;
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+    background-color: grey;
+}
+#submission-list div.submission .description {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+#submission-list div.submission .result {
+    width: auto;
+    padding: 10px;
+    margin-left: auto;
+    flex-direction: row;
+    align-items: center;
+}
+#submission-list div.submission .result .status {
+    font-weight: bold;
+}
+#submission-list div.submission .result .time {
+    margin-left: 10px;
+    font-style: italic;
+}
+#ranking .contestant {
+    width: 100%;
+    height: 70px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+#ranking .contestant div {
+    margin-right: 10px;
+}
+#ranking .contestant .color-indicator {
+    width: 20px;
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+    background-color: grey;
+}
+#ranking .contestant .description {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#user-card .result,
+#ranking .contestant .result {
+    padding: 15px;
+    width: auto;
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+}
+#user-card .result div,
+#ranking .contestant .result div {
+    margin-right: 0;
+    border-right: 2px solid grey;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#user-card .result div:last-child,
+#ranking .contestant .result div:last-child {
+    margin-left: 15px;
+    border-right: 0;
+    font-size: 18pt;
+    font-weight: bold;
 }

@@ -7,10 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class Problem:
-    def __init__(self, name: str, content: FileResponse, time_limit_s: int = 0, memory_limit_mib: int = 0):
+    def __init__(self, name: str, content: FileResponse):
         self.name: str = name
-        self.time_limit_s: int = time_limit_s
-        self.memory_limit_mib: int = memory_limit_mib
         self.content: FileResponse = content
 
 
@@ -18,22 +16,9 @@ def __problem_loader__(name: str) -> Problem:
     path = f"problems/{name}"
     if not os.path.isdir(path):
         raise FileNotFoundError(f"Problem {name} not found")
-    config = open(f"{path}/config.cfg", "r")
-    time_limit_s = 0
-    memory_limit_mib = 0
-    while True:
-        line = config.readline().strip()
-        if not line:
-            break
-        k, v = line.strip().split("=", 1)
-        if k == "time_limit_s":
-            time_limit_s = int(v)
-        elif k == "memory_limit_mib":
-            memory_limit_mib = int(v)
-    config.close()
     open(f"{path}/content.pdf", "rb").close()
     content = FileResponse(f"{path}/content.pdf")
-    return Problem(name, content, time_limit_s, memory_limit_mib)
+    return Problem(name, content)
 
 
 class ProblemManager:

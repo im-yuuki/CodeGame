@@ -1,9 +1,27 @@
 import logging
 from datetime import datetime, UTC
-from os import makedirs
-from sys import stdout, stderr
-
+from os import makedirs, getpid, kill
+from signal import SIGINT
 from colorama import Fore, Style, init
+from prompt_toolkit.patch_stdout import StdoutProxy
+from prompt_toolkit.shortcuts import PromptSession
+
+
+async def interactive_shell(handler):
+    session = PromptSession("[cmd] > ")
+    while True:
+        try:
+            result = await session.prompt_async()
+            await handler(result)
+        except (EOFError, KeyboardInterrupt):
+            return
+
+
+async def start_shell(handler):
+    try:
+        await interactive_shell(handler)
+    finally:
+        kill(getpid(), SIGINT)
 
 
 def setup() -> None:
@@ -11,13 +29,15 @@ def setup() -> None:
     file_name = f"logs/{now}.log"
     # Create log file if not exist
     try:
-        open(file_name, "a").close()
+        open(file_name, "ab").close()
     except FileNotFoundError:
         makedirs("logs", exist_ok=True)
-        open(file_name, "w").close()
+        open(file_name, "wb").close()
     
     # Setup logging
-    init(autoreset=True)
+    init(
+        autoreset=True
+    )
     
     class SpectificLevelFilter(logging.Filter):
         # Logging filter that allow only the spectified level to be processed
@@ -36,17 +56,18 @@ def setup() -> None:
     DATEFMT = "%d-%m-%Y %H:%M:%S"
     
     # Create handlers
-    info_handler = logging.StreamHandler(stream=stdout)
+    proxy = StdoutProxy(raw=True)
+    info_handler = logging.StreamHandler(proxy)
     info_handler.setLevel(logging.INFO)
     info_handler.addFilter(SpectificLevelFilter(logging.INFO))
     info_handler.setFormatter(logging.Formatter(INFO_FORMAT, datefmt=DATEFMT))
     
-    warning_handler = logging.StreamHandler(stream=stdout)
+    warning_handler = logging.StreamHandler(proxy)
     warning_handler.setLevel(logging.WARNING)
     warning_handler.addFilter(SpectificLevelFilter(logging.WARNING))
     warning_handler.setFormatter(logging.Formatter(WARNING_FORMAT, datefmt=DATEFMT))
     
-    error_handler = logging.StreamHandler(stream=stderr)
+    error_handler = logging.StreamHandler(proxy)
     error_handler.setLevel(logging.ERROR)
     error_handler.addFilter(SpectificLevelFilter(logging.ERROR))
     error_handler.setFormatter(logging.Formatter(ERROR_FORMAT, datefmt=DATEFMT))

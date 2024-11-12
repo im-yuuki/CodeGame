@@ -4,10 +4,9 @@ import os
 import uvicorn
 from dotenv import load_dotenv
 
-from api.admin import AdminRouter
-from api.contestant import ContestantRouter
+from api.http import ContestantRouter
 from managers.base import BaseLoader
-from utils import setup_logging
+from utils import console
 
 
 if __name__ == "__main__":
@@ -24,12 +23,11 @@ __  __            __
     /____/\\____/_/  \\__/ |__/|__/\\__/_/_/   \\___/
 
 """)
-    setup_logging.setup()
+    console.setup()
     load_dotenv()
     base = BaseLoader()
     base.server.mount("/ui", StaticFiles(directory="src/web", html=True))
-    base.server.mount("/api/admin", AdminRouter(base))
-    base.server.mount("/api/contestant", ContestantRouter(base))
+    base.server.mount("/api", ContestantRouter(base))
     uvicorn.run(
         base.server,
         host="0.0.0.0",

@@ -6,7 +6,6 @@
         <title>FIT-UET CodeGame</title>
         <link rel="stylesheet" type="text/css" href="background.css" />
         <link rel="stylesheet" type="text/css" href="base.css" />
-        <link rel="stylesheet" type="text/css" href="loading.css" />
         <link rel="stylesheet" type="text/css" href="contestant.css" />
     </head>
     <body>
@@ -34,7 +33,7 @@
                 <h1>Chào mừng!</h1>
                 <form id="register-form">
                     <label for="name">Nhập tên của bạn:</label>
-                    <input type="text" name="name" minlength="3" required />
+                    <input type="text" name="name" minlength="3" maxlength="30" placeholder="Tên của bạn" required />
                     <label>Chọn màu bạn yêu thích:</label>
                     <div>
                         <div class="theme-selector" style="background-color: #d53e4f; margin-left: 0;"></div>
@@ -47,22 +46,12 @@
                     <button class="btn" type="submit" id="register-btn">Tham gia</button>
                 </form>
                 <div id="waiting" hidden>
-                    <div class="lds-ring" style="color: black">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
                     <span>Bạn đã đăng kí thành công</span>
-                    <br />
                     <span>Vui lòng đợi Ban tổ chức bắt đầu trận đấu nhé...</span>
                 </div>
             </div>
-            <div id="hidden-menu" hidden>
-                <a href="#">[Bảng điều khiển]</a>
-                <a href="#">[Khán giả]</a>
-            </div>
         </section>
-        <section id="contest">
+        <section id="contest" hidden>
             <div id="top-bar">
                 <div id="user-card" class="box">
                     <div style="display: block; width: 20px; height: 20px; border-radius: 50%; background-color: var(--theme-color);"></div>
@@ -70,7 +59,14 @@
                         <h1 id="contestant-name">Name</h1>
                         <span id="contestant-desc">Description</span>
                     </div>
-                    <div style="margin-left: auto;">
+                    <div class="result">
+                        <div>
+                            <h4>Problem</h4>
+                            <span>AC</span>
+                        </div>
+                        <div>
+                            <h3>100</h3>
+                        </div>
                     </div>
                 </div>
                 <div id="timer" class="box">
@@ -103,29 +99,85 @@
                     </div>
                 </div>
                 <div id="problem" class="box workspace-window">
-                    <div id="problem-selector">
-
+                    <div>
+                        <h1>Đề bài</h1>
+                        <select id="problem-selector">
+                            <option value="">-- Chọn bài --</option>
+                        </select>
+                        <iframe id="problem-display" src="about:blank"></iframe>
                     </div>
-                    <div id="problem-display">
-                        <h1 id="problem-name">ProblemName</h1>
-                        <span id="problem-desc">Giới hạn thời gian: 1s | Bộ nhớ tối đa: 1024MiB</span>
-                        <br>
-                        <iframe
-                            src="http://infolab.stanford.edu/pub/papers/google.pdf"
-                            scrolling="auto"
-                        ></iframe>
-                    </div>
-                    
                 </div>
                 <div id="submission" class="box workspace-window" hidden>
-
+                    <div>
+                        <h1>Nộp bài</h1>
+                        <form id="submit-form">
+                            <div>
+                                <select id="submit-problem-selector" required>
+                                    <option value="">-- Chọn bài --</option>
+                                </select>
+                                <select id="submit-language-selector" required>
+                                    <option value="">-- Chọn ngôn ngữ --</option>
+                                </select>
+                                <input type="file" id="file-selector" name="file" required />
+                            </div>
+                            <button class="btn" type="submit">Nộp bài</button>
+                        </form>
+                        <h1>Kết quả</h1>
+                        <div id="submission-list" class="viewport">
+                            <!-- <div class="box submission">
+                                <div class="color-indicator"></div>
+                                <div class="description">
+                                    <h3>ProblemName</h3>
+                                    <span>Language</span>
+                                </div>
+                                <div class="result">
+                                    <span class="status">ACCEPTED</span>
+                                    <span class="time">0s</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
                 </div>
                 <div id="ranking" class="box workspace-window" hidden>
-                    
+                    <div>
+                        <h1>Bảng xếp hạng</h1>
+                        <div id="ranking-list" class="viewport">
+                            <!-- <div class="box contestant">
+                                <div class="color-indicator"></div>
+                                <div class="description">
+                                    <h3>Name</h3>
+                                    <span>Description</span>
+                                </div>
+                                <div class="result">
+                                    <div>
+                                        <h4>Problem</h4>
+                                        <span>AC</span>
+                                    </div>
+                                    <div>
+                                        <h3>100</h3>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-        <section id="statistic" hidden></section>
+        <section id="statistic" hidden>
+            <div class="box">
+                <div class="logo">
+                    <img src="assets/uet-logo.png" style="margin-left: 0" />
+                    <img
+                        src="assets/fit-logo.png"
+                        style="margin-right: 0"
+                    />
+                </div>
+                <h1>Xin chúc mừng!</h1>
+                <span>Số điểm của bạn là:</span>
+                <span id="score">100</span>
+                <span>Cảm ơn bạn đã tham gia cuộc thi của chúng mình nhé 💖</span>
+            </div>
+        </section>
     </body>
     <script src="contestant.js"></script>
 </html>
