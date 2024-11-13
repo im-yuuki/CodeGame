@@ -5,7 +5,7 @@ cd "$(dirname "$0")" || exit
 export PYTHONIOENCODING=utf-8
 
 if [ -d ".venv" ]; then
-    .venv/Scripts/python src/main.py
+    .venv/Scripts/python main.py
 else
-    python src/main.py
+    python main.py
 fi

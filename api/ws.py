@@ -5,7 +5,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 logger = logging.getLogger(__name__)
 
 
-class WebSocketManager():
+class WebSocketManager:
     def __init__(self):
         super().__init__()
         self.clients: set[WebSocket] = set()

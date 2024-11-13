@@ -57,17 +57,9 @@
                     <div style="display: block; width: 20px; height: 20px; border-radius: 50%; background-color: var(--theme-color);"></div>
                     <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 10px;">
                         <h1 id="contestant-name">Name</h1>
-                        <span id="contestant-desc">Description</span>
+                        <!-- <span id="contestant-description">Description</span> -->
                     </div>
-                    <div class="result">
-                        <div>
-                            <h4>Problem</h4>
-                            <span>AC</span>
-                        </div>
-                        <div>
-                            <h3>100</h3>
-                        </div>
-                    </div>
+                    <div class="result"></div>
                 </div>
                 <div id="timer" class="box">
                     <span id="timer-txt">--:--</span>
@@ -112,19 +104,19 @@
                         <h1>Nộp bài</h1>
                         <form id="submit-form">
                             <div>
-                                <select id="submit-problem-selector" required>
+                                <select id="submit-problem-selector" name="problem" required>
                                     <option value="">-- Chọn bài --</option>
                                 </select>
-                                <select id="submit-language-selector" required>
+                                <select id="submit-language-selector" name="language" required>
                                     <option value="">-- Chọn ngôn ngữ --</option>
                                 </select>
-                                <input type="file" id="file-selector" name="file" required />
+                                <input type="file" id="file-selector" name="code" required />
                             </div>
                             <button class="btn" type="submit">Nộp bài</button>
                         </form>
                         <h1>Kết quả</h1>
                         <div id="submission-list" class="viewport">
-                            <!-- <div class="box submission">
+                            <div class="box submission hidden" id="submission-sample">
                                 <div class="color-indicator"></div>
                                 <div class="description">
                                     <h3>ProblemName</h3>
@@ -134,7 +126,7 @@
                                     <span class="status">ACCEPTED</span>
                                     <span class="time">0s</span>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,14 +134,14 @@
                     <div>
                         <h1>Bảng xếp hạng</h1>
                         <div id="ranking-list" class="viewport">
-                            <!-- <div class="box contestant">
+                            <div class="box contestant hidden" id="ranking-sample">
                                 <div class="color-indicator"></div>
                                 <div class="description">
                                     <h3>Name</h3>
-                                    <span>Description</span>
+                                    <!-- <span>Description</span> -->
                                 </div>
                                 <div class="result">
-                                    <div>
+                                    <div class="hidden">
                                         <h4>Problem</h4>
                                         <span>AC</span>
                                     </div>
@@ -157,7 +149,7 @@
                                         <h3>100</h3>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +166,7 @@
                 </div>
                 <h1>Xin chúc mừng!</h1>
                 <span>Số điểm của bạn là:</span>
-                <span id="score">100</span>
+                <span id="final-score">0</span>
                 <span>Cảm ơn bạn đã tham gia cuộc thi của chúng mình nhé 💖</span>
             </div>
         </section>

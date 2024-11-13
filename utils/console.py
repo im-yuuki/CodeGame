@@ -6,7 +6,6 @@ from colorama import Fore, Style, init
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import PromptSession
 
-
 async def interactive_shell(handler):
     session = PromptSession("[cmd] > ")
     while True:
@@ -15,7 +14,6 @@ async def interactive_shell(handler):
             await handler(result)
         except (EOFError, KeyboardInterrupt):
             return
-
 
 async def start_shell(handler):
     try:
@@ -26,18 +24,16 @@ async def start_shell(handler):
 
 def setup() -> None:
     now = int(datetime.now(UTC).timestamp())
-    file_name = f"logs/{now}.log"
+    file_name = f".logs/{now}.log"
     # Create log file if not exist
     try:
         open(file_name, "ab").close()
     except FileNotFoundError:
-        makedirs("logs", exist_ok=True)
+        makedirs(".logs", exist_ok=True)
         open(file_name, "wb").close()
     
     # Setup logging
-    init(
-        autoreset=True
-    )
+    init(autoreset=True)
     
     class SpectificLevelFilter(logging.Filter):
         # Logging filter that allow only the spectified level to be processed
@@ -55,8 +51,9 @@ def setup() -> None:
     
     DATEFMT = "%d-%m-%Y %H:%M:%S"
     
+    proxy = StdoutProxy(sleep_between_writes=0, raw=True)
+    
     # Create handlers
-    proxy = StdoutProxy(raw=True)
     info_handler = logging.StreamHandler(proxy)
     info_handler.setLevel(logging.INFO)
     info_handler.addFilter(SpectificLevelFilter(logging.INFO))

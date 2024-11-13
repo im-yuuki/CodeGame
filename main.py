@@ -26,7 +26,7 @@ __  __            __
     console.setup()
     load_dotenv()
     base = BaseLoader()
-    base.server.mount("/ui", StaticFiles(directory="src/web", html=True))
+    base.server.mount("/ui", StaticFiles(directory="web", html=True))
     base.server.mount("/api", ContestantRouter(base))
     uvicorn.run(
         base.server,

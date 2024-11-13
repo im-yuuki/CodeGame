@@ -5,4 +5,5 @@ colorama==0.4.6
 aiohttp==3.10.10
 pyjwt==2.9.0
 websockets==13.1
-prompt-toolkit==3.0.4
+prompt-toolkit==3.0.48
+python-multipart==0.0.17

@@ -25,7 +25,7 @@
     font-style: italic;
     text-align: center;
 }
-#statistic .box #score {
+#statistic .box #final-score {
     font-style: normal;
     font-weight: bolder;
     font-size: 36pt;
@@ -95,14 +95,14 @@
 }
 #nav-bar {
     width: 60px;
-    padding: 5px;
+    padding: 15px 5px;
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
 }
 #nav-bar div {
     width: 100%;
-    height: 45px;
+    height: 50px;
     margin-bottom: 10px;
     background-color: white;
     border-radius: 5px;
@@ -110,6 +110,9 @@
     flex-shrink: 0;
     justify-content: center;
     align-items: center;
+}
+#nav-bar div:last-child {
+    margin-bottom: 0;
 }
 #nav-bar div:hover {
     border: 2px solid var(--theme-color);
@@ -178,6 +181,9 @@
 #submission-list div.submission div {
     margin-right: 10px;
 }
+#submission-list div.submission.hidden {
+	display: none;
+}
 #submission-list div.submission .color-indicator {
     width: 20px;
     height: 100%;
@@ -213,6 +219,9 @@
     justify-content: center;
     padding: 0;
 }
+#ranking .contestant.hidden {
+    display: none;
+}
 #ranking .contestant div {
     margin-right: 10px;
 }
@@ -245,6 +254,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+#user-card .result div.hidden,
+#ranking .contestant .result div.hidden {
+    display: none;
 }
 #user-card .result div:last-child,
 #ranking .contestant .result div:last-child {
