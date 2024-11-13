@@ -152,12 +152,16 @@ document.addEventListener("DOMContentLoaded", function() {
         let problemDiv = item.querySelector(`div[data-id="${problem}"]`);
         if (problemDiv === null) return;
         let statusField = problemDiv.querySelector("span");
-        statusField.innerText = getShortenedStatus(status);
-        statusField.style.color = getColor(status);
+        if (statusField.innerText !== "AC") {
+            statusField.innerText = getShortenedStatus(status);
+            statusField.style.color = getColor(status);
+        }
         if (id === userId) {
             let userProblemDiv = document.querySelector(`#user-card .result div[data-id="${problem}"]`);
-            userProblemDiv.querySelector("span").innerText = getShortenedStatus(status);
-            userProblemDiv.querySelector("span").style.color = getColor(status);
+            let span = userProblemDiv.querySelector("span");
+            if (span.innerText === "AC") return;
+            span.innerText = getShortenedStatus(status);
+            span.style.color = getColor(status);
         }
     }
 
@@ -335,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 break;
             case "SUBMISSION_RESULT":
+                if (data.contestant === userId) updateSubmission(data.id, data.problem, data.language, data.status, data.time);
                 updateContestantProgress(data.contestant, data.problem, data.status);
                 updateContestantScore(data.contestant, data.score);
                 break;

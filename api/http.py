@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from typing import Optional
 
@@ -5,10 +6,10 @@ import fastapi
 from fastapi.responses import Response
 
 from managers.base import BaseLoader
-from managers.contests import Submission
+from managers.data import Submission
 from managers.problems import Problem
 from utils import auth
-from utils.enums import ContestProgress
+from utils.enums import ContestProgress, SubmissionStatus
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +109,8 @@ class ContestantRouter(fastapi.APIRouter):
             code: bytes = await data.get("code", None).read()
             if not isinstance(problem, str) or not isinstance(language, str) or not isinstance(code, bytes):
                 raise ValueError("Request does not match the expected format")
+            if contestant.state.get(problem, None) is SubmissionStatus.ACCEPTED:
+                return fastapi.Response(status_code=400, content="You already solved this problem")
             submission = Submission(
                 contestant_id=contestant.id,
                 problem=problem,
@@ -115,7 +118,7 @@ class ContestantRouter(fastapi.APIRouter):
                 time=self.base.contest.elapsed,
                 code=code
             )
-            # TODO
+            asyncio.create_task(self.base.sandbox_manager.submit(submission, self.base.contest.submission_callback))
             return fastapi.responses.JSONResponse(status_code=200, content={
                 "id": str(submission.id),
                 "problem": submission.problem,
@@ -158,7 +161,7 @@ class ContestantRouter(fastapi.APIRouter):
                     "duration": self.base.contest.duration,
                     "elapsed": self.base.contest.elapsed,
                     "problems": [problem.name for problem in self.base.contest.problems],
-                    "supported_languages": ["c", "cpp", "rust"]
+                    "supported_languages": self.base.contest.supported_languages
                 }
             if self.base.contest.progress is not ContestProgress.NOT_STARTED:
                 data["score"] = contestant.score

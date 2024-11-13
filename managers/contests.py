@@ -2,84 +2,27 @@ import asyncio
 import logging
 import random
 from typing import Optional
-from uuid import uuid4, UUID
+from uuid import UUID
 
-from managers.problems import Problem, ProblemManager
-from utils.enums import SubmissionStatus, ContestProgress
+from managers.data import Contestant, Submission
+from managers.problems import Problem
+from managers.sandbox import SandboxManager
+from utils.enums import ContestProgress
 
 logger = logging.getLogger(__name__)
 
 
-class Submission:
-    def __init__(self, contestant_id: UUID, problem: str, language: str, time: int, code: bytes):
-        self.id: UUID = uuid4()
-        self.contestant_id: UUID = contestant_id
-        self.problem: str = problem
-        self.language: str = language
-        self.time: int = time
-        self.code: bytes = code
-        self.status: SubmissionStatus = SubmissionStatus.PENDING
-        
-
-class Contestant:
-    def __init__(self, name: str, color: Optional[str] = None):
-        self.name: str = name
-        self.id: UUID = uuid4()
-        self.color: Optional[str] = color
-        self.score: int = 0
-        self.finished: int = 0
-        self.state: dict[str, SubmissionStatus] = {}
-        self.submissions: list[Submission] = []
-        
-    def mark_finished(self, time: Optional[int] = None):
-        if time is None:
-            time = 0
-            for sub in self.submissions:
-                if sub.status is SubmissionStatus.ACCEPTED:
-                    time = max(time, sub.time)
-        self.finished = time
-        
-    def refresh_score(self) -> int:
-        _sum = 0
-        for sub in self.submissions:
-            if sub.status is SubmissionStatus.ACCEPTED:
-                _sum += 2000
-            elif sub.status not in (SubmissionStatus.INTERNAL_ERROR, SubmissionStatus.PENDING):
-                _sum -= 100
-        if self.finished > 0:
-            _sum -= self.finished
-            # if _sum < 0:
-            #     _sum = 0
-        self.score = _sum
-        return _sum
-    
-    def add_submission(self, submission: Submission) -> bool:
-        if submission.problem not in self.state:
-            return False
-        if submission.status is SubmissionStatus.PENDING:
-            return False
-        if self.state[submission.problem] is not SubmissionStatus.ACCEPTED:
-            self.state[submission.problem] = submission.status
-            self.submissions.append(submission)
-            self.refresh_score()
-        mark_finish = True
-        for key in self.state:
-            if self.state[key] is not SubmissionStatus.ACCEPTED:
-                mark_finish = False
-                break
-        if mark_finish:
-            self.mark_finished()
-    
-
 class Contest:
-    def __init__(self, problem_manager: ProblemManager, broadcast: callable):
-        self.problem_manager = problem_manager
+    def __init__(self, get_available_problems: callable, sandbox_manager: SandboxManager, broadcast: callable):
+        self.get_available_problems = get_available_problems
+        self.sandbox_manager = sandbox_manager
         self.broadcast = broadcast
         self.progress: ContestProgress = ContestProgress.NOT_STARTED
         self.duration: int = 0
         self.elapsed: int = 0
         self.problems: list[Problem] = []
         self.contestants: dict[UUID, Contestant] = {}
+        self.supported_languages: list[str] = []
         self._timer: Optional[asyncio.Task] = None
         
         
@@ -110,19 +53,32 @@ class Contest:
     def start(self, duration: int = 1800, problems_qty: int = 3) -> bool:
         if self.progress is not ContestProgress.NOT_STARTED:
             return False
+        
+        if not self.contestants:
+            logger.warning("Starting contest with no contestants")
+            return False
+        
+        self.supported_languages = self.sandbox_manager.get_supported_languages()
+        if not self.supported_languages:
+            logger.warning("Starting contest with no supported languages")
+            return False
+        
+        available_problems = self.get_available_problems()
+        self.problems = random.sample(available_problems, k=min(problems_qty, len(available_problems)))
+        if not self.problems:
+            logger.warning("Starting contest with no problems")
+            return False
+        
         self.duration = duration
         self.progress = ContestProgress.IN_PROGRESS
-        problems_qty = min(problems_qty, len(self.problem_manager.problems))
-        self.problems = random.sample(list(self.problem_manager.problems.values()), k=problems_qty)
         self._timer = asyncio.create_task(self.__timer__())
         self.broadcast({
             "event": "CONTEST_STARTED",
             "duration": duration,
             "problems": [p.name for p in self.problems],
-            "supported_languages": ["c", "cpp", "rust"]
+            "supported_languages": self.supported_languages
         })
-        logger.info(f"Contest started. Duration {duration}s")
-        logger.info(f"Problems: {', '.join(p.name for p in self.problems)} ({len(self.problems)})")
+        logger.info(f"Contest started. Duration {duration}s. Problems: {len(self.problems)}")
         return True
         
         
@@ -170,9 +126,12 @@ class Contest:
         contestant.add_submission(submission)
         self.broadcast({
             "event": "SUBMISSION_RESULT",
+            "id": str(submission.id),
             "contestant": str(contestant.id),
             "problem": submission.problem,
+            "language": submission.language,
             "status": submission.status.name,
-            "score": contestant.score
+            "time": submission.time,
+            "score": contestant.refresh_score()
         })
         
