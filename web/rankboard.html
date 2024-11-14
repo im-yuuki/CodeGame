@@ -1,13 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>RankBoard - FIT-UET CodeGame</title>
         <link rel="stylesheet" type="text/css" href="base.css" />
+        <link rel="stylesheet" type="text/css" href="rankboard.css" />
+        
     </head>
     <body>
-        
-    </body>
+        <div class="bg-image">
+            <img src="assets/uet-logo.png" style="margin-left: 0" />
+            <img src="assets/fit-logo.png" style="margin-right: 0" />
+        </div>
+        <div class="container">
+            <div id="timer" class="box disabled">
+                <span id="timer-txt">--:--</span>
+            </div>
+            <div id="ranking" class="viewport">
+                <div class="box contestant hidden" id="ranking-sample">
+                    <div class="color-indicator"></div>
+                    <div class="description">
+                        <h3>Name</h3>
+                        <span hidden>Đã hoàn thành</span>
+                    </div>
+                    <div class="result">
+                        <div class="hidden">
+                            <h4>Problem</h4>
+                            <span>AC</span>
+                        </div>
+                        <div>
+                            <h3>100</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body> 
     <script src="rankboard.js"></script>
 </html>

@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const registerSection            = document.getElementById("register");
-    const contestSection             = document.getElementById("contest");
-    const statisticSection           = document.getElementById("statistic");
-    const registerForm               = document.getElementById("register-form");
-    const finalScore                 = document.getElementById("final-score");
-    const contestantName             = document.getElementById("contestant-name");
-    const submitProblemSelector      = document.getElementById("submit-problem-selector");
-    const submitLanguageSelector     = document.getElementById("submit-language-selector");
-    const problemSelector            = document.getElementById("problem-selector");
-    const submissionLíst             = document.getElementById("submission-list");
-    const registerBtn                = document.getElementById("register-btn");
-    const problemDisplay             = document.getElementById("problem-display");
-    const submitForm                 = document.getElementById("submit-form");
-    const timerTxt                   = document.getElementById("timer-txt");
-    const exitBtn                    = document.getElementById("exit-btn");
-    const rankingList                = document.getElementById("ranking-list");
-    const rankingSample              = document.getElementById("ranking-sample");
+    const registerSection = document.getElementById("register");
+    const contestSection = document.getElementById("contest");
+    const statisticSection = document.getElementById("statistic");
+    const registerForm = document.getElementById("register-form");
+    const finalScore = document.getElementById("final-score");
+    const contestantName = document.getElementById("contestant-name");
+    const submitProblemSelector = document.getElementById("submit-problem-selector");
+    const submitLanguageSelector = document.getElementById("submit-language-selector");
+    const problemSelector = document.getElementById("problem-selector");
+    const submissionList = document.getElementById("submission-list");
+    const registerBtn = document.getElementById("register-btn");
+    const problemDisplay = document.getElementById("problem-display");
+    const submitForm = document.getElementById("submit-form");
+    const timerTxt = document.getElementById("timer-txt");
+    const exitBtn = document.getElementById("exit-btn");
+    const rankingList = document.getElementById("ranking-list");
+    const rankingSample = document.getElementById("ranking-sample");
 
-    const submitBtn                  = document.querySelector("#submit-form button");
-    const userCardResult             = document.querySelector("#user-card .result");
+    const submitBtn = document.querySelector("#submit-form button");
+    const userCardResult = document.querySelector("#user-card .result");
 
-    const themeSelectors             = document.querySelectorAll(".theme-selector");
+    const themeSelectors = document.querySelectorAll(".theme-selector");
 
     function getColor(status) {
         switch (status) {
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateSubmission(id, problem, lang, result, time) {
         // Query for existing submission
-        let item = submissionLíst.querySelector(`[data-id="${id}"]`);
+        let item = submissionList.querySelector(`[data-id="${id}"]`);
         let _new = false;
         if (item === null) {
             _new = true;
@@ -77,36 +77,20 @@ document.addEventListener("DOMContentLoaded", function() {
         let sec = time % 60;
         item.querySelector(".result .time").innerText = (min > 0 ? min + "m" : "") + sec + "s";
         if (_new) {
-            submissionLíst.appendChild(item);
-            submissionLíst.scrollTop = submissionLíst.scrollHeight;
+            submissionList.appendChild(item);
+            submissionList.scrollTop = submissionList.scrollHeight;
         }
     }
     
     // Manage contestant cards in top bar and ranking list
     let userId = "";
-    
-    let preStartContestantList = [];
-    let deployedContestantList = false
 
-    function addPreStartContestant(id, name, color, score, progress) {
-        let item = {
-            id: id,
-            name: name,
-            color: color,
-            score: score,
-            progress: progress
-        }
-        preStartContestantList.push(item);
-    }
-
-    function deployContestantList(problemList) {
-        if (deployedContestantList) return;
-        deployedContestantList = true;
-        preStartContestantList.forEach(contestant => {
+    function deployContestantList(contestantList, problemList) {
+        contestantList.forEach(contestant => {
             let item = rankingSample.cloneNode(true);
             item.classList.remove("hidden");
 
-            item.setAttribute("data-id", contestant.id);
+            item.setAttribute("data-id", contestant.uid);
             item.querySelector(".color-indicator").style.backgroundColor = contestant.color;
             item.querySelector(".description h3").innerText = contestant.name;
             let resultDiv = item.querySelector(".result");
@@ -126,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 resultDiv.insertBefore(clone, scoreDiv);
             });
             rankingList.appendChild(item);
-            if (contestant.id === userId) {
+            if (contestant.uid === userId) {
                 resultDiv.childNodes.forEach(node => {
                     if (node.classList) if (node.classList.contains("hidden")) return;
                     userCardResult.appendChild(node.cloneNode(true));
@@ -135,10 +119,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function updateContestantScore(id, score) {
+    function updateContestantScore(id, score, finished) {
         let item = rankingList.querySelector(`div[data-id="${id}"]`);
         if (item === null) return;
         item.querySelector(".result div h3").innerText = score;
+        if (finished) item.querySelector(".description span").hidden = false;
         if (id === userId) {
             document.querySelector("#user-card .result div h3").innerText = score;
             finalScore.innerText = score;
@@ -167,21 +152,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function sortRankingList() {
         let items = Array.from(rankingList.children);
+
+        // Sort items based on the score
         items.sort((a, b) => {
             let scoreA = parseInt(a.querySelector(".result div h3").innerText);
             let scoreB = parseInt(b.querySelector(".result div h3").innerText);
             return scoreB - scoreA;
         });
-        // Replace different items only
+
+        // Replace items only if their position has changed
         items.forEach((item, index) => {
-            new_id = item.getAttribute("data-id");
-            old_id = rankingList.children[index].getAttribute("data-id");
-            if (new_id !== old_id) {
+            if (rankingList.children[index] !== item) {
                 rankingList.insertBefore(item, rankingList.children[index]);
-                rankingList.removeChild(rankingList.children[index + 1]);
             }
         });
     }
+
 
     // Prevent right-click
     document.addEventListener("contextmenu", function(event) {
@@ -246,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
             registerBtn.innerHTML = "Tham gia";
         }
         let color = document.documentElement.style.getPropertyValue("--theme-color");
-        if (color === "") color = "rgb(213, 62, 79)";
+        if (color === "") color = "rgb(50, 136, 189)";
         let data = {
             name: registerForm.name.value,
             color: color,
@@ -312,36 +298,39 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Websocket connection
-    const ws = new WebSocket(`ws://${window.location.host}/ws`);
+    const ws = new WebSocket("../ws");
     ws.timeout = 10000;
     ws.onmessage = function(event) {
         let data = JSON.parse(event.data);
         switch (data.event) {
-            case "NEW_CONTESTANT":
-                addPreStartContestant(data.id, data.name, data.color, 0, {});
-                break;
             case "CONTEST_STARTED":
-                startContest(data.duration);
+                if (userId === "") {
+                    alert("Phiên thi đã bắt đầu, bạn vui lòng đợi phiên thi tiếp theo.");
+                    registerSection.hidden = true;
+                    contestSection.hidden = true;
+                    statisticSection.hidden = false;
+                    return;
+                }
                 data.problems.forEach(addProblem);
-                deployContestantList(data.problems);
                 data.supported_languages.forEach(addLanguage);
+                deployContestantList(data.contestants, data.problems);
+                startContest(data.duration);
                 break;
             case "CONTEST_STOPPED":
+                if (userId === "") return;
                 endContest();
                 break;
             case "CONTEST_RESET":
                 reset();
                 break;
             case "CONTESTANT_FINISHED":
-                if (data.id === userId) {
-                    updateContestantScore(userId, data.score);
-                    endContest();
-                }
+                updateContestantScore(data.uid, data.score, true);
+                if (data.uid === userId) endContest();
                 break;
             case "SUBMISSION_RESULT":
                 if (data.contestant === userId) updateSubmission(data.id, data.problem, data.language, data.status, data.time);
                 updateContestantProgress(data.contestant, data.problem, data.status);
-                updateContestantScore(data.contestant, data.score);
+                updateContestantScore(data.contestant, data.score, false);
                 break;
         }
     }
@@ -482,9 +471,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             if (data.contestants !== undefined) {
                 data.contestants.forEach(contestant => {
-                    let contestantScore = contestant.score === undefined ? 0 : contestant.score;
-                    let contestantProgress = contestant.progress === undefined ? {} : contestant.progress;
-                    addPreStartContestant(contestant.id, contestant.name, contestant.color, contestantScore, contestantProgress);
+                    if (contestant.progress === undefined) contestant.progress = {};
+                    if (contestant.score === undefined) contestant.score = 0;
                 });
             }
             switch (data.contest_progress) {
@@ -494,12 +482,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById("waiting").hidden = false;
                     break;
                 case "IN_PROGRESS":
-                    startContest(data.contest.duration - data.contest.elapsed)
                     data.contest.problems.forEach(addProblem);
                     data.contest.supported_languages.forEach(addLanguage);
-                    deployContestantList(data.contest.problems);
+                    deployContestantList(data.contestants, data.contest.problems);
+                    data.submissions.forEach(submission => {
+                        updateSubmission(submission.id, submission.problem, submission.language, submission.result, submission.time);
+                    })
+                    startContest(data.contest.duration - data.contest.elapsed)
                     break;
                 case "FINISHED":
+                    deployContestantList([])
                     endContest();
                     break;
             }

@@ -81,7 +81,7 @@ class Sandbox:
                     "id": str(submission.id),
                     "problem_id": submission.problem,
                     "target_module": submission.language,
-                    "code": submission.code
+                    "file": submission.code
                 }) as resp:
                     if resp.status != 200:
                         submission.status = SubmissionStatus.INTERNAL_ERROR

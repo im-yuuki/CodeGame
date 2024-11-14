@@ -149,10 +149,11 @@ class ContestantRouter(fastapi.APIRouter):
             }
             for c in self.base.contest.contestants.values():
                 data["contestants"].append({
+                    "uid": str(c.id),
                     "name": c.name,
                     "color": c.color,
                     "score": c.score,
-                    "finished": c.finished
+                    "progress": {problem: status.name for problem, status in c.state.items()}
                 })
             if contestant.color is not None:
                 data["color"] = contestant.color
@@ -163,6 +164,15 @@ class ContestantRouter(fastapi.APIRouter):
                     "problems": [problem.name for problem in self.base.contest.problems],
                     "supported_languages": self.base.contest.supported_languages
                 }
+                data["submissions"] = []
+                for submission in contestant.submissions:
+                    data["submissions"].append({
+                        "id": str(submission.id),
+                        "problem": submission.problem,
+                        "language": submission.language,
+                        "result": submission.status.name,
+                        "time": submission.time
+                    })
             if self.base.contest.progress is not ContestProgress.NOT_STARTED:
                 data["score"] = contestant.score
             logger.info(f"Restored session for {contestant.name}")

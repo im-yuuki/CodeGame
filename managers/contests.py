@@ -7,7 +7,7 @@ from uuid import UUID
 from managers.data import Contestant, Submission
 from managers.problems import Problem
 from managers.sandbox import SandboxManager
-from utils.enums import ContestProgress
+from utils.enums import ContestProgress, SubmissionStatus
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class Contest:
         self.contestants[c.id] = c
         self.broadcast({
             "event": "NEW_CONTESTANT",
-            "id": str(c.id),
+            "uid": str(c.id),
             "name": name,
             "color": color
         })
@@ -71,11 +71,22 @@ class Contest:
         
         self.duration = duration
         self.progress = ContestProgress.IN_PROGRESS
+        contestants_data = []
+        for contestant in self.contestants.values():
+            contestant.state = {p.name: SubmissionStatus.PENDING for p in self.problems}
+            contestants_data.append({
+                "uid": str(contestant.id),
+                "name": contestant.name,
+                "color": contestant.color,
+                "score": contestant.score,
+                "progress": {p.name: SubmissionStatus.PENDING.name for p in self.problems}
+            })
         self._timer = asyncio.create_task(self.__timer__())
         self.broadcast({
             "event": "CONTEST_STARTED",
             "duration": duration,
             "problems": [p.name for p in self.problems],
+            "contestants": contestants_data,
             "supported_languages": self.supported_languages
         })
         logger.info(f"Contest started. Duration {duration}s. Problems: {len(self.problems)}")
@@ -87,7 +98,8 @@ class Contest:
             return False
         self.progress = ContestProgress.FINISHED
         for contestant in self.contestants.values():
-            contestant.mark_finished()
+            if contestant.finished == 0:
+                self.mark_finished(contestant.id)
         if self._timer:
             self._timer.cancel()
             self._timer = None
@@ -111,7 +123,7 @@ class Contest:
         contestant.refresh_score()
         self.broadcast({
             "event": "CONTESTANT_FINISHED",
-            "id": str(contestant_id),
+            "uid": str(contestant_id),
             "score": self.contestants[contestant_id].refresh_score()
         })
         return True
@@ -119,11 +131,14 @@ class Contest:
     
     async def submission_callback(self, submission: Submission):
         if self.progress is not ContestProgress.IN_PROGRESS:
+            logger.warning("Ignored submission %s: Contest is not in progress", submission.id)
             return
         if submission.contestant_id not in self.contestants:
+            logger.warning("Ignored submission %s: Unknown contestant", submission.id)
             return
         contestant = self.contestants[submission.contestant_id]
-        contestant.add_submission(submission)
+        if not contestant.add_submission(submission):
+            logger.warning("Submission %s has been rejected", submission.id)
         self.broadcast({
             "event": "SUBMISSION_RESULT",
             "id": str(submission.id),
@@ -134,4 +149,10 @@ class Contest:
             "time": submission.time,
             "score": contestant.refresh_score()
         })
+        if contestant.finished > 0:
+            self.broadcast({
+                "event": "CONTESTANT_FINISHED",
+                "uid": str(contestant.id),
+                "score": contestant.refresh_score()
+            })
         

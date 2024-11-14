@@ -46,7 +46,7 @@ class Contestant:
         return _sum
     
     def add_submission(self, submission: Submission) -> bool:
-        if submission.problem not in self.state:
+        if submission.problem not in self.state.keys():
             return False
         if submission.status is SubmissionStatus.PENDING:
             return False
