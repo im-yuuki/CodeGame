@@ -475,6 +475,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (contestant.score === undefined) contestant.score = 0;
                 });
             }
+            else data.contestants = [];
             switch (data.contest_progress) {
                 case "NOT_STARTED":
                     registerSection.hidden = false;
@@ -488,6 +489,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     data.submissions.forEach(submission => {
                         updateSubmission(submission.id, submission.problem, submission.language, submission.result, submission.time);
                     })
+                    data.contestants.forEach(contestant => {
+                        for (const key in contestant.progress) {
+                            updateContestantProgress(contestant.uid, key, contestant.progress[key]);
+                        }
+                        updateContestantScore(contestant.uid, contestant.score, contestant.finished > 0);
+                    });
                     startContest(data.contest.duration - data.contest.elapsed)
                     break;
                 case "FINISHED":
@@ -495,7 +502,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     endContest();
                     break;
             }
-            if (data.score !== undefined) updateContestantScore(userId, data.score);
         }
         xhr.onerror = function() {
             startNormal();

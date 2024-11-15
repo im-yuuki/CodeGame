@@ -29,7 +29,7 @@ class Contest:
     async def __timer__(self):
         if self.progress is not ContestProgress.IN_PROGRESS:
             return
-        while self.elapsed <= self.duration:
+        while self.elapsed < self.duration:
             await asyncio.sleep(1)
             self.elapsed += 1
         self.stop()
@@ -96,10 +96,13 @@ class Contest:
     def stop(self) -> bool:
         if self.progress is not ContestProgress.IN_PROGRESS:
             return False
-        self.progress = ContestProgress.FINISHED
+        
         for contestant in self.contestants.values():
             if contestant.finished == 0:
                 self.mark_finished(contestant.id)
+
+        self.progress = ContestProgress.FINISHED
+        
         if self._timer:
             self._timer.cancel()
             self._timer = None
@@ -150,9 +153,5 @@ class Contest:
             "score": contestant.refresh_score()
         })
         if contestant.finished > 0:
-            self.broadcast({
-                "event": "CONTESTANT_FINISHED",
-                "uid": str(contestant.id),
-                "score": contestant.refresh_score()
-            })
+            self.mark_finished(contestant.id)
         

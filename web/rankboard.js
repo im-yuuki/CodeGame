@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let countdownInterval = undefined;
     function startTimer(countdown) {
         timerBox.classList.remove("disabled");
-        timerBox.classList.remove("disabled");
         let end = Math.floor(Date.now() / 1000) + countdown;
         let timer, minutes, seconds;
         countdownInterval = setInterval(() => {

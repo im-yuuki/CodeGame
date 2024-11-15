@@ -266,3 +266,8 @@
     font-size: 18pt;
     font-weight: bold;
 }
+#user-card .result div span,
+#ranking .contestant .result div span {
+    font-size: 16pt;
+    font-weight: bold;
+}

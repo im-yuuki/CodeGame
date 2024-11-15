@@ -16,7 +16,7 @@ class Sandbox:
     def __init__(self, url: str):
         self.id = uuid4()
         self.url = url
-        self.session = aiohttp.ClientSession(base_url=url, timeout=aiohttp.ClientTimeout(total=10))
+        self.session = aiohttp.ClientSession(base_url=url, timeout=aiohttp.ClientTimeout(total=30))
         self.lock = asyncio.Lock()
         self.version: Optional[str] = None
         self.supported_modules: set[str] = set()
@@ -57,7 +57,7 @@ class Sandbox:
                             self.supported_problems.add(item)
                         
                     if not self.ready:
-                        logger.info(f"Connected to sandbox {self.id}. Version: {self.version}")
+                        logger.info(f"Connected to sandbox {self.id}({self.url}). Version: {self.version}")
                     self.ready = True
                 except Exception as e:
                     self.version = None
@@ -111,10 +111,11 @@ class Sandbox:
                         )
                     (logger.info if submission.status == SubmissionStatus.ACCEPTED else logger.warning)(
                         "Submission %s finished. Status: %s" + (". Message: " + message if message else ""),
-                        submission.id, self.id
+                        submission.id, submission.status.name
                     )
         except Exception as e:
             logger.error(f"Failed to submit to sandbox {self.id}: {e}")
+            submission.status = SubmissionStatus.INTERNAL_ERROR
         finally:
             self.in_queue -= 1
 

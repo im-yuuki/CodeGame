@@ -26,6 +26,8 @@ class Contestant:
         self.submissions: list[Submission] = []
     
     def mark_finished(self, time: Optional[int] = None):
+        if self.finished > 0:
+            return
         if time is None:
             time = 0
             for sub in self.submissions:
@@ -60,3 +62,4 @@ class Contestant:
                 break
         if mark_finish:
             self.mark_finished()
+        return True

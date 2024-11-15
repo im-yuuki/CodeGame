@@ -153,7 +153,8 @@ class ContestantRouter(fastapi.APIRouter):
                     "name": c.name,
                     "color": c.color,
                     "score": c.score,
-                    "progress": {problem: status.name for problem, status in c.state.items()}
+                    "progress": {problem: status.name for problem, status in c.state.items()},
+                    "finished": c.finished
                 })
             if contestant.color is not None:
                 data["color"] = contestant.color
@@ -173,8 +174,6 @@ class ContestantRouter(fastapi.APIRouter):
                         "result": submission.status.name,
                         "time": submission.time
                     })
-            if self.base.contest.progress is not ContestProgress.NOT_STARTED:
-                data["score"] = contestant.score
             logger.info(f"Restored session for {contestant.name}")
             return fastapi.responses.JSONResponse(status_code=200, content=data)
         except Exception as e:

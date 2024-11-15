@@ -101,3 +101,7 @@
     font-size: 18pt;
     font-weight: bold;
 }
+.contestant .result div span {
+    font-size: 16pt;
+    font-weight: bold;
+}
